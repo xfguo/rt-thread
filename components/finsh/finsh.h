@@ -15,6 +15,7 @@
 #define __FINSH_H__
 
 #include <rtthread.h>
+#include "tinylibc.h"
 
 #if defined(_MSC_VER)
 #pragma section("FSymTab$f",read)
@@ -68,14 +69,6 @@ typedef unsigned long  u_long;
     !defined(__IAR_SYSTEMS_ICC__)  && \
     !defined(__ADSPBLACKFIN__)     && \
     !defined(_MSC_VER)
-
-/* only for GNU GCC */
-
-#if !(defined(__GNUC__) && defined(__x86_64__))
-typedef unsigned int size_t;
-#else
-#include <stdio.h>
-#endif
 
 #ifndef NULL
 #define NULL RT_NULL
@@ -411,7 +404,6 @@ struct finsh_parser
  *
  * The basic data type in finsh shell
  */
-
 enum finsh_type {
 	finsh_type_unknown = 0, /**< unknown data type */
 	finsh_type_void,		/**< void  			*/

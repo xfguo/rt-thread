@@ -28,7 +28,7 @@
  * 2013-04-03     Bernard      strip more characters.
  */
 #include <finsh.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 
 #include "finsh_token.h"
 #include "finsh_error.h"

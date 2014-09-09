@@ -9,6 +9,7 @@ cmd.c
 ''')
 
 fsh_src = Split('''
+tinylibc.c
 finsh_compiler.c
 finsh_error.c
 finsh_heap.c
