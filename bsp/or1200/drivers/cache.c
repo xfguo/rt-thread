@@ -43,6 +43,29 @@ void invalidate_dcache_range(unsigned long addr, unsigned long stop)
 	}
 }
 
+void icache_disable(void)
+{
+	mtspr(SPR_SR, mfspr(SPR_SR) & ~SPR_SR_ICE);
+}
+
+int icache_status(void)
+{
+	return mfspr(SPR_SR) & SPR_SR_ICE;
+}
+
+void icache_enable(void)
+{
+	mtspr(SPR_SR, mfspr(SPR_SR) | SPR_SR_ICE);
+	asm volatile("l.nop");
+	asm volatile("l.nop");
+	asm volatile("l.nop");
+	asm volatile("l.nop");
+	asm volatile("l.nop");
+	asm volatile("l.nop");
+	asm volatile("l.nop");
+	asm volatile("l.nop");
+}
+
 static void invalidate_icache_range(unsigned long addr, unsigned long stop)
 {
 	ulong block_size = (mfspr(SPR_ICCFGR) & SPR_ICCFGR_CBS) ? 32 : 16;
@@ -61,11 +84,6 @@ void flush_cache(unsigned long addr, unsigned long size)
 {
 	flush_dcache_range(addr, addr + size);
 	invalidate_icache_range(addr, addr + size);
-}
-
-int icache_status(void)
-{
-	return mfspr(SPR_SR) & SPR_SR_ICE;
 }
 
 int checkicache(void)
@@ -119,24 +137,6 @@ void dcache_enable(void)
 void dcache_disable(void)
 {
 	mtspr(SPR_SR, mfspr(SPR_SR) & ~SPR_SR_DCE);
-}
-
-void icache_enable(void)
-{
-	mtspr(SPR_SR, mfspr(SPR_SR) | SPR_SR_ICE);
-	asm volatile("l.nop");
-	asm volatile("l.nop");
-	asm volatile("l.nop");
-	asm volatile("l.nop");
-	asm volatile("l.nop");
-	asm volatile("l.nop");
-	asm volatile("l.nop");
-	asm volatile("l.nop");
-}
-
-void icache_disable(void)
-{
-	mtspr(SPR_SR, mfspr(SPR_SR) & ~SPR_SR_ICE);
 }
 
 int cache_init(void)

@@ -18,3 +18,6 @@ void *memset(void *dst, int val, unsigned int size);
 int strncmp(const char *cs, const char *ct, size_t count);
 
 int atoi(const char* s);
+
+extern size_t strlen(const char*s);
+extern void* memcpy( void* s1, void* s2, size_t n);

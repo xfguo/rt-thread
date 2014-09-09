@@ -22,7 +22,7 @@ struct rt_ns16550
 	rt_uint8_t rx_buffer[RT_UART_RX_BUFFER_SIZE];
 }uart_device;
 
-void rt_hw_serial_isr_1(int arg)
+void rt_hw_serial_isr_1(int arg, void *param)
 {
 
     /*clear pending interrupt flag*/
