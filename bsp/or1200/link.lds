@@ -5,11 +5,8 @@ __DYNAMIC = 0;
 /* Linking for loading into external RAM */
 MEMORY    
 {
-/*
-	ld_info : ORIGIN = 0x00000000, LENGTH = 0x000000F0 
-*/
-	vectors : ORIGIN = 0x00000000, LENGTH = 0x2000 - 0x100
-	ram : ORIGIN = 0x00002000, LENGTH = 0x00200000 - 0x00002000
+	vectors	: ORIGIN = 0x00000000, LENGTH = 0x2000 - 0x100
+	ram	: ORIGIN = 0x00002000, LENGTH = 0x00200000 - 0x00002000
 }
 
 /*
@@ -24,16 +21,10 @@ MEMORY
 _min_stack      = 0x4000;   /* 16K - minimum stack space to reserve */
 
 SECTIONS{	
-/*
-	.ld_info :{
-      
-	} > ld_info
-*/
-
-        .vectors :
-        {
+	.vectors :
+	{
 		*(.vectors)
-        } > vectors
+	} > vectors
 
 	.text : {
 		_stext = .;
@@ -104,15 +95,15 @@ SECTIONS{
 	} > ram
 	
 	/* ensure there is enough room for stack */
-        .stack (NOLOAD): {
-                . = ALIGN(4);
-				. = . + _min_stack ;
-                . = ALIGN(4);
-                stack = . ;
-                _stack = . ;
-        } > ram
-        
-        .stab  0 (NOLOAD) : {
+	.stack (NOLOAD): {
+		. = ALIGN(4);
+		. = . + _min_stack ;
+		. = ALIGN(4);
+		stack = . ;
+		_stack = . ;
+	} > ram
+	
+	.stab  0 (NOLOAD) : {
 		[ .stab ]
 	}
 	

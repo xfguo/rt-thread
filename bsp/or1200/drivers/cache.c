@@ -18,8 +18,6 @@
  * MA 02111-1307 USA
  */
 
-//#include <common.h>
-//#include <asm/system.h>
 #include "support.h"
 #include "spr-defs.h"
 #define ulong unsigned long

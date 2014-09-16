@@ -15,7 +15,7 @@
 
 #include "spr-defs.h"
 #include "support.h"
-#include "interrput.h"
+#include "interrupt.h"
 #include <rtthread.h>
 
 extern volatile rt_uint8_t rt_interrupt_nest;

@@ -29,10 +29,10 @@ static void thread1_entry(void* parameter)
 	rt_kprintf("thread1 dynamicly created ok\n");
 	do{
 		rt_kprintf("thread1 count: %d\n",count++);
-		
-                rt_thread_delay(RT_TICK_PER_SECOND);
+
+		rt_thread_delay(RT_TICK_PER_SECOND);
 	}while(1);
-}	
+}
 
 static void thread2_entry(void* parameter)
 {
@@ -51,12 +51,12 @@ int rt_application_init()
 	if (tid1 != RT_NULL){
 		rt_thread_startup(tid1);
 	}
-	
+
 	tid2 = rt_thread_create("thread2", thread2_entry, RT_NULL, 512, 6, 10);
 	if (tid2 != RT_NULL){
 		rt_thread_startup(tid2);
 	}
-	
+
 	return 0;
 }
 

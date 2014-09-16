@@ -6,14 +6,14 @@
  */
 #define PT_PC		0x0
 #define PT_SR		0x4
-#define PT_GPR2	0x8
-#define PT_GPR3	0xc
-#define PT_GPR4	0x10
-#define PT_GPR5	0x14
-#define PT_GPR6	0x18
-#define PT_GPR7	0x1c
-#define PT_GPR8	0x20
-#define PT_GPR9	0x24
+#define PT_GPR2		0x8
+#define PT_GPR3		0xc
+#define PT_GPR4		0x10
+#define PT_GPR5		0x14
+#define PT_GPR6		0x18
+#define PT_GPR7		0x1c
+#define PT_GPR8		0x20
+#define PT_GPR9		0x24
 #define PT_GPR10	0x28
 #define PT_GPR11	0x2c
 #define PT_GPR12	0x30
