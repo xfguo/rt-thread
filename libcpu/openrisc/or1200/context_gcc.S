@@ -8,9 +8,9 @@
 	.global		_align
 	.global		_rt_hw_context_switch
 	.global		timer_switch_interrupt_do
-	.global		TimerISR
+	.global		_timer_isr
 	.global		isr_switch_interrupt_do
-	.global		UsrISR
+	.global		_usr_isr
 	.global		rt_hw_context_switch_to
 
 	.extern		rtthread_startup
@@ -129,7 +129,7 @@
 /* ---[ 0x500: Timer exception ]----------------------------------------- */
 	.org	0x500
 
-	EXCEPTION_HANDLER(TimerISR)
+	EXCEPTION_HANDLER(_timer_isr)
 
 /* ---[ 0x600: Aligment exception ]-------------------------------------- */
 	.org	0x600
@@ -141,9 +141,9 @@
 /* ---[ 0x800: External interrupt exception ]---------------------------- */
 	.org	0x800
 
-	EXCEPTION_HANDLER(UsrISR)
+	EXCEPTION_HANDLER(_usr_isr)
 
- /* ---[ 0x900: DTLB miss exception ]------------------------------------- */
+/* ---[ 0x900: DTLB miss exception ]------------------------------------- */
 	.org	0x900
 
 /* ---[ 0xa00: ITLB miss exception ]------------------------------------- */
@@ -423,24 +423,25 @@ _rt_hw_context_switch:
 	/* l.sys exception for now so we are in supervisor mode */
 	/* exception  - recover pc from epcr */
 
-	l.mfspr	r3, r0, SPR_EPCR_BASE     /* save program counter that was put in exception register */
+	l.mfspr	r3, r0, SPR_EPCR_BASE	/* save program counter that was put in exception register */
 	l.sw	PT_PC(r1), r3
-	l.mfspr	r3, r0, SPR_ESR_BASE      /* save status register that was put in exception register */
+
+	l.mfspr	r3, r0, SPR_ESR_BASE	/* save status register that was put in exception register */
 	l.sw	PT_SR(r1), r3
 
 	STORE_CONTEXT
 
 	/* Store current stack pointer   */
-		LOAD_SYMBOL_TO_GPR(r3, rt_interrupt_from_thread)
-		l.lwz   r3, 0(r3)
-	l.sw	0(r3), r1                /* from->sp = r1 */
+	LOAD_SYMBOL_TO_GPR(r3, rt_interrupt_from_thread)
+	l.lwz   r3, 0(r3)
+	l.sw	0(r3), r1		/* from->sp = r1 */
 
 	/* Load next stack pointer */
-		LOAD_SYMBOL_TO_GPR(r4, rt_interrupt_to_thread)
-		l.lwz   r4, 0(r4)
-	l.lwz	r1, 0(r4)                /* r1 = to->sp */
+	LOAD_SYMBOL_TO_GPR(r4, rt_interrupt_to_thread)
+	l.lwz   r4, 0(r4)
+	l.lwz	r1, 0(r4)		/* r1 = to->sp */
 
-	l.lwz	r2, PT_PC(r1)                /* load context for task to be resumed */
+	l.lwz	r2, PT_PC(r1)		/* load context for task to be resumed */
 	l.mtspr	r0, r2, SPR_EPCR_BASE
 
 	l.lwz	r2, PT_SR(r1)
@@ -495,7 +496,7 @@ rt_hw_context_switch_to:
  Uses :
 ------------------------------
 */
-TimerISR:
+_timer_isr:
 	l.mfspr	r3, r0, SPR_EPCR_BASE     /* save program counter that was put in exception register */
 	l.sw	PT_PC(r1), r3
 	l.mfspr	r3, r0, SPR_ESR_BASE      /* save status register that was put in exception register */
@@ -563,7 +564,7 @@ timer_switch_interrupt_do:
 
 /*
 ------------------------------
-	UsrISR
+	_usr_isr
 ------------------------------
  Description :
 
@@ -571,7 +572,7 @@ timer_switch_interrupt_do:
  Uses :
 ------------------------------
 */
-UsrISR:
+_usr_isr:
 	l.mfspr	r3, r0, SPR_EPCR_BASE     /* save program counter that was put in exception register */
 	l.sw	PT_PC(r1), r3
 	l.mfspr	r3, r0, SPR_ESR_BASE      /* save status register that was put in exception register */

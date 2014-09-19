@@ -19,8 +19,8 @@
 void rt_hw_timer_handler(void)
 {
 	/* enter interrupt, done in assembly */
-	
-	TimerClearInterrupt();
+
+	timer_clear_interrupt();
 	rt_tick_increase();
 
 	/* leave interrupt, done in assembly */
@@ -45,10 +45,10 @@ void rt_hw_timer_handler(void)
 			while((REG8(UART_BASE + UART_LSR) & UART_LSR_THRE) != UART_LSR_THRE);
 			REG8(UART_BASE + UART_TX) = '\r';
 		}
-		
+
 		/* Wait for transfer fifo empty*/
 		while((REG8(UART_BASE + UART_LSR) & UART_LSR_THRE) != UART_LSR_THRE);
-		
+
 		/* transfer a character */
 		REG8(UART_BASE + UART_TX) = *str;
 		/* point to next character */
@@ -91,7 +91,7 @@ static void rt_hw_console_init()
 void rt_hw_board_init()
 {
 	/* init console before using rt_kprint() */
-	rt_hw_console_init();	
-	
+	rt_hw_console_init();
+
 	/* init UserISR interrupt routines */
 }

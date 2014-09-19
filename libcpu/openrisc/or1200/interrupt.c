@@ -32,13 +32,14 @@ struct ihnd int_handlers[MAX_INT_HANDLERS];
 int rt_hw_interrupt_init()
 {
 	int i;
-		
+
 	for(i = 0; i < MAX_INT_HANDLERS; i++){
 		int_handlers[i].handler = 0;
 		int_handlers[i].arg = 0;
-  	}
-  	mtspr(SPR_PICMR, 0x00000000);
-	//set OR1200 to accept exceptions
+	}
+	mtspr(SPR_PICMR, 0x00000000);
+
+	/* set OR1200 to accept exceptions */
 	mtspr(SPR_SR, mfspr(SPR_SR) | SPR_SR_IEE);
 
 	/* init interrupt nest, and context in thread sp */
@@ -46,11 +47,11 @@ int rt_hw_interrupt_init()
 	rt_interrupt_from_thread = 0;
 	rt_interrupt_to_thread = 0;
 	rt_thread_switch_interrupt_flag = 0;
-	
+
 	return 0;
 }
 
-/* Add interrupt handler */ 
+/* Add interrupt handler */
 int rt_hw_interrupt_install(unsigned long vect, void (* handler)(void *), void *arg)
 {
 	if(vect >= MAX_INT_HANDLERS)
@@ -64,7 +65,7 @@ int rt_hw_interrupt_install(unsigned long vect, void (* handler)(void *), void *
 	return 0;
 }
 
-/* Disable interrupt */ 
+/* Disable interrupt */
 int rt_hw_interrupt_mask(unsigned long vect)
 {
 	if(vect >= MAX_INT_HANDLERS)
@@ -75,11 +76,11 @@ int rt_hw_interrupt_mask(unsigned long vect)
 	return 0;
 }
 
-/* Enable interrupt */ 
+/* Enable interrupt */
 int rt_hw_interrupt_unmask(unsigned long vect)
 {
 	if(vect >= MAX_INT_HANDLERS)
-                return -1;
+		return -1;
 
 	mtspr(SPR_PICMR, mfspr(SPR_PICMR) | (0x00000001L << vect));
 
@@ -89,53 +90,58 @@ int rt_hw_interrupt_unmask(unsigned long vect)
 /* Main interrupt handler */
 void rt_hw_trap_irq()
 {
-	unsigned long picsr = mfspr(SPR_PICSR);   //process only the interrupts asserted at signal catch, ignore all during process
+	/* process only the interrupts asserted at signal catch, ignore all
+	 * during process
+	 */
+	unsigned long picsr = mfspr(SPR_PICSR);
 	unsigned long i = 0;
 
-	while(i < 32) {
+	while(i < MAX_INT_HANDLERS) {
 		if((picsr & (0x01L << i)) && (int_handlers[i].handler != 0)) {
-			(*int_handlers[i].handler)(int_handlers[i].arg); 
+			(*int_handlers[i].handler)(int_handlers[i].arg);
 		}
 		i++;
 	}
-	mtspr(SPR_PICSR, 0);	//clear interrupt status: all modules have level interrupts, which have to be cleared by software,
-					//thus this is safe, since non processed interrupts will get re-asserted soon enough
+
+	/* clear interrupt status: all modules have level interrupts, which
+	 * have to be cleared by software, thus this is safe, since non
+	 * processed interrupts will get re-asserted soon enough
+	 */
+	mtspr(SPR_PICSR, 0);
 }
 
-/*
- * void rt_hw_context_switch_interrupt(rtuint32 from, rtuint32 to);
- */
+/*  */
 void rt_hw_context_switch_interrupt(rt_uint32_t from, rt_uint32_t to)
 {
-        if (rt_thread_switch_interrupt_flag != 1)
-        {
-                rt_thread_switch_interrupt_flag = 1;
-                rt_interrupt_from_thread = from;
-        }
-        rt_interrupt_to_thread = to;
+	if (rt_thread_switch_interrupt_flag != 1)
+	{
+		rt_thread_switch_interrupt_flag = 1;
+		rt_interrupt_from_thread = from;
+	}
+	rt_interrupt_to_thread = to;
 }
 
 /* Disable or1200 interrupt */
 rt_uint32_t rt_hw_interrupt_disable(void)
 {
 	rt_uint32_t cpu_sr;
- 
+
 	cpu_sr = mfspr(SPR_SR);
 	mtspr(SPR_SR, cpu_sr & ~(SPR_SR_IEE | SPR_SR_TEE));
 	return cpu_sr;
 }
 
-/* Enable or1200 interrupt */ 
+/* Enable or1200 interrupt */
 void rt_hw_interrupt_enable(rt_uint32_t cpu_sr)
 {
-	mtspr(SPR_SR, cpu_sr); /* | (SPR_SR_IEE | SPR_SR_TEE) */
+	mtspr(SPR_SR, cpu_sr);
 }
 
 /* thread switch process using system call by l.sys0 */
 void rt_hw_context_switch(rt_uint32_t from, rt_uint32_t to)
 {
-    rt_interrupt_from_thread = from;
-    rt_interrupt_to_thread = to;
-    __asm__ ("l.sys 0");
-    __asm__ ("l.nop");
+	rt_interrupt_from_thread = from;
+	rt_interrupt_to_thread = to;
+	__asm__ ("l.sys 0");
+	__asm__ ("l.nop");
 }

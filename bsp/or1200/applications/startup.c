@@ -13,6 +13,7 @@
 #include <rthw.h>
 #include <rtthread.h>
 #include "board.h"
+#include "timer.h"
 
 extern int rt_application_init(void);
 extern void rt_hw_interrupt_init(void);
@@ -28,7 +29,7 @@ extern void rt_hw_interrupt_init(void);
 #endif
 
 #ifdef __GNUC__
-	/* extern unsigned char ___bss_start; */
+	extern unsigned char ___bss_start;
 	extern unsigned char __end;
 #endif
 
@@ -41,7 +42,7 @@ extern void rt_hw_interrupt_init(void);
 #endif
 
 extern void rt_hw_board_init();
-extern void TimerInit();
+
 /**
  * This function will startup RT-Thread RTOS.
  */
@@ -66,7 +67,7 @@ void rtthread_startup(void)
 	rt_system_timer_init();
 
 #ifdef RT_USING_HEAP
-	rt_system_heap_init((void*)&__end, (void*)0x100000);
+	rt_system_heap_init((void*)&__end, (void*)&___bss_start);
 #endif
 
 	/* init scheduler system */
@@ -83,7 +84,7 @@ void rtthread_startup(void)
 	/* init all device */
 	rt_device_init_all();
 #endif	
-	TimerInit();
+	timer_init();
 
 	/* init application */
 	//rt_application_init();
