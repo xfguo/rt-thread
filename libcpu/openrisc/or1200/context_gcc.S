@@ -383,6 +383,7 @@ _reset :
 
 	/* Jump to start of program */
 	l.jal	rtthread_startup
+	l.nop
 
 _align:
 	l.ori	r3, r0, 0x600
