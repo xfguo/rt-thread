@@ -29,8 +29,8 @@ extern void rt_hw_interrupt_init(void);
 #endif
 
 #ifdef __GNUC__
-	extern unsigned char ___bss_start;
-	extern unsigned char __end;
+	extern unsigned char __heap_start;
+	extern unsigned char __heap_end;
 #endif
 
 #ifdef RT_USING_UIP
@@ -67,7 +67,7 @@ void rtthread_startup(void)
 	rt_system_timer_init();
 
 #ifdef RT_USING_HEAP
-	rt_system_heap_init((void*)&__end, (void*)&___bss_start);
+	rt_system_heap_init((void*)&__heap_start, (void*)&__heap_end);
 #endif
 
 	/* init scheduler system */
@@ -87,7 +87,7 @@ void rtthread_startup(void)
 	timer_init();
 
 	/* init application */
-	//rt_application_init();
+	rt_application_init();
 	
 #ifdef RT_USING_FINSH
 	/* init finsh */
