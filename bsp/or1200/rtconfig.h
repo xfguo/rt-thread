@@ -18,7 +18,6 @@
 /* Tick per Second*/
 #define RT_TICK_PER_SECOND	100
 
-
 /* SECTION: RT_DEBUG */
 /* Thread Debug*/
 #define RT_THREAD_DEBUG
@@ -191,4 +190,3 @@
 #define RT_LWIP_ETHTHREAD_STACKSIZE	1024
 
 #endif
-#define RT_USING_NOLIBC
