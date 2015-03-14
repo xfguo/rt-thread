@@ -13,7 +13,7 @@ if os.getenv('RTT_CC'):
 # ONLY GCC SUPPORTED
 if CROSS_TOOL == 'gcc':
 	PLATFORM = 'gcc'
-	EXEC_PATH = '/opt/orx/orxsys/staging_dir/toolchain-or1k/bin'
+	EXEC_PATH = ''
 elif CROSS_TOOL == 'keil':
 	print '================ERROR============================'
 	print 'Not support keil yet!'
@@ -27,6 +27,18 @@ elif CROSS_TOOL == 'iar':
 
 if os.getenv('RTT_EXEC_PATH'):
 	EXEC_PATH = os.getenv('RTT_EXEC_PATH')
+
+if EXEC_PATH == "":
+	print '================ERROR============================'
+	print 'cannot find EXEC_PATh, set RTT_EXEC_PATH to the toolchain execute path.'
+	print '================================================='
+	exit(0)
+
+if os.path.exists(EXEC_PATH) is False:
+	print '================ERROR============================'
+	print 'path "%s" does not exist, set RTT_EXEC_PATH please.' % EXEC_PATH
+	print '================================================='
+	exit(0)
 
 # BUILD = 'debug'
 BUILD = 'release'
@@ -59,6 +71,6 @@ if PLATFORM == 'gcc':
 
 	POST_ACTION = "\n".join([
 		OBJDUMP + ' -x -d -S $TARGET >> system.map',
-		OBJCPY + ' -O binary $TARGET rt-thread-or1200.bin',
+		OBJCPY + ' -O binary $TARGET rtthread-or1200.bin',
 		SIZE + ' $TARGET'
 	])
