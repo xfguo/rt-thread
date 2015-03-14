@@ -13,11 +13,11 @@
 #define _BOARD_H_
 
 /* System Clock */
-#define SYS_CLK			40000000 /* 40MHz */
+#define SYS_CLK			10000000 /* 10MHz */
 #define TICKS_PER_SECOND	100
 
 /* UART */
-#define UART_BAUD_RATE	38400
+#define UART_BAUD_RATE	9600
 #define UART_BASE	0x90000000
 #define UART_IRQ	2
 
