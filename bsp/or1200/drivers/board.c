@@ -63,21 +63,21 @@ static void rt_hw_console_init()
 	float float_divisor;
  
 	/* Reset receiver and transmiter */
-	//start up FIFO ,clear RCVR FIFO and XMIT FIFO ,and set FIFO size for 4 bytes
+	/* start up FIFO ,clear RCVR FIFO and XMIT FIFO ,and set FIFO size for 4 bytes */
 	REG8(UART_BASE + UART_FCR) = UART_FCR_ENABLE_FIFO | UART_FCR_CLEAR_RCVR | UART_FCR_CLEAR_XMIT | UART_FCR_TRIGGER_4;
  
 	/* Disable all interrupts */
 	REG8(UART_BASE + UART_IER) = 0x0;
         
 	/* Enable RX and TX interrupt */
-	// REG8(UART_BASE + UART_IER) = UART_IER_RDI | UART_IER_THRI;
+	/* REG8(UART_BASE + UART_IER) = UART_IER_RDI | UART_IER_THRI; */
  
 	/* Set 8 bit char, 1 stop bit, no parity */
 	REG8(UART_BASE + UART_LCR) = UART_LCR_WLEN8 & ~(UART_LCR_STOP | UART_LCR_PARITY);
  
 	/* Set baud rate */
 	float_divisor = (float)SYS_CLK/(16 * UART_BAUD_RATE);
-	float_divisor += 0.50f; // Ensure round up
+	float_divisor += 0.50f; /* Ensure round up */
 	divisor = (rt_int32_t)float_divisor;
         
 	/* set corresponding register value */

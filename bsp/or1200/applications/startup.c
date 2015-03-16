@@ -33,14 +33,6 @@ extern void rt_hw_interrupt_init(void);
 	extern unsigned char __heap_end;
 #endif
 
-#ifdef RT_USING_UIP
-	#include "uip_rtt.h"
-	#include "uip-conf.h"
-	#include "uip.h"
-	#include "uip_arp.h"
-	#include "uipif.h"
-#endif
-
 extern void rt_hw_board_init();
 
 /**
@@ -94,15 +86,6 @@ void rtthread_startup(void)
 	finsh_system_init();
 	finsh_set_device("uart1");
 #endif
-
-#ifdef RT_USING_UIP
-	//extern void uip_sys_init(void);
-	eth_system_device_init();    
-	ethoc_initialize(0, 0x92000000);
-	uip_sys_init();
-	/* re-init device driver */
-	rt_device_init_all();
-#endif 
 
 	/* init idle thread */
 	rt_thread_idle_init();

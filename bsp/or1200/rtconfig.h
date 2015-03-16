@@ -4,8 +4,6 @@
 
 #define IDLE_THREAD_STACK_SIZE	2048
 
-//#define RT_USING_UIP
-
 /* RT_NAME_MAX*/
 #define RT_NAME_MAX	32
 
@@ -90,16 +88,15 @@
 #define FINSH_THREAD_STACK_SIZE 8192
 #define RT_USING_TC
 
-
 /* SECTION: a runtime libc library */
 /* a runtime libc library*/
 /* #define RT_USING_NEWLIB */
-/*#define RT_USING_MINILIBC */ 
+/* #define RT_USING_MINILIBC */ 
 #define RT_USING_NOLIBC
 
 /* SECTION: C++ support */
 /* Using C++ support*/
-#define RT_USING_CPLUSPLUS
+/* #define RT_USING_CPLUSPLUS */
 
 /* SECTION: RTGUI support */
 /* using RTGUI support*/
@@ -147,7 +144,7 @@
 /* Enable SNMP protocol*/
 /* #define RT_LWIP_SNMP */
 
-/* Using DHCP*/
+/* Using DHCP */
 /* #define RT_LWIP_DHCP */
 
 /* ip address of target*/

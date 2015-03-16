@@ -30,7 +30,7 @@ if os.getenv('RTT_EXEC_PATH'):
 
 if EXEC_PATH == "":
 	print '================ERROR============================'
-	print 'cannot find EXEC_PATh, set RTT_EXEC_PATH to the toolchain execute path.'
+	print 'cannot find EXEC_PATH, set RTT_EXEC_PATH to the toolchain execute path.'
 	print '================================================='
 	exit(0)
 
