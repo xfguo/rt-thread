@@ -58,6 +58,7 @@
 /* SECTION: Device System */
 /* Using Device System*/
 #define RT_USING_DEVICE
+#define RT_USING_SPI
 
 /* buffer size for UART reception*/
 #define RT_UART_RX_BUFFER_SIZE	64

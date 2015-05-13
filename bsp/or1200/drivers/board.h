@@ -25,4 +25,7 @@
 #define ETHERNET_BASE		0x92000000
 #define ETHERNET_IRQ		4
 
+/* OpenCores SPI Controller */
+#define SPI_BASE		0xA0000000
+
 #endif /* _BOARD_H_ */

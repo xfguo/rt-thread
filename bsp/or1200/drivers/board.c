@@ -15,6 +15,7 @@
 #include "board.h"
 #include "serial.h"
 #include "timer.h"
+#include "oc_spi.h"
 
 void rt_hw_timer_handler(void)
 {
@@ -36,8 +37,8 @@ void rt_hw_timer_handler(void)
  *
  * @param str the displayed string
  */
- void rt_hw_console_output(const char* str)
- {
+void rt_hw_console_output(const char* str)
+{
 	while(*str){
 		/* Transmit Character */
 		if(*str == '\n'){
@@ -45,16 +46,16 @@ void rt_hw_timer_handler(void)
 			while((REG8(UART_BASE + UART_LSR) & UART_LSR_THRE) != UART_LSR_THRE);
 			REG8(UART_BASE + UART_TX) = '\r';
 		}
-
+	
 		/* Wait for transfer fifo empty*/
 		while((REG8(UART_BASE + UART_LSR) & UART_LSR_THRE) != UART_LSR_THRE);
-
+	
 		/* transfer a character */
 		REG8(UART_BASE + UART_TX) = *str;
 		/* point to next character */
 		str++;
 	}
- }
+}
 
 /* init console to support rt_kprintf */
 static void rt_hw_console_init()
@@ -88,10 +89,25 @@ static void rt_hw_console_init()
 }
 #endif
 
+static struct oc_spi_bus oc_spi;
+static struct rt_spi_device spi_device;
+static struct oc_spi_cs spi_flash_cs;
+
+static void rt_hw_spi_init()
+{
+	oc_spi_register(SPI_BASE, &oc_spi, "spi1");
+	
+	spi_flash_cs.slave_sel = (rt_uint8_t)0x01;
+	rt_spi_bus_attach_device(&spi_device, "spi_flash", "spi1", (void*)&spi_flash_cs);
+}
+
 void rt_hw_board_init()
 {
 	/* init console before using rt_kprint() */
 	rt_hw_console_init();
 
 	/* init UserISR interrupt routines */
+
+	/* init SPI Bus & Devices */
+	rt_hw_spi_init();
 }
