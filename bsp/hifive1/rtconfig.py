@@ -10,7 +10,7 @@ if os.getenv('RTT_CC'):
 
 if  CROSS_TOOL == 'gcc':
     PLATFORM    = 'gcc'
-    EXEC_PATH   = '/home/zj/risc-v/riscv64-unknown-elf-gcc-20170612-x86_64-linux-centos6/bin'
+    EXEC_PATH   = '/work/riscv/freedom-e-sdk/toolchain/bin'
 
 if os.getenv('RTT_EXEC_PATH'):
     EXEC_PATH = os.getenv('RTT_EXEC_PATH')
@@ -26,7 +26,7 @@ TARGET_NAME = 'rtthread.bin'
 #------- GCC settings ----------------------------------------------------------
 if PLATFORM == 'gcc':
     # toolchains
-    PREFIX = 'riscv64-unknown-elf-'
+    PREFIX = 'riscv32-unknown-elf-'
     CC = PREFIX + 'gcc'
     AS = PREFIX + 'gcc'
     AR = PREFIX + 'ar'
